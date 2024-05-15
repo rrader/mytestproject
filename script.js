@@ -180,6 +180,8 @@ function draw() {
 
 function mousePressed() {
   gameStarted = true;
-  me.lifes = 3;
-  monster1.speed = 1;
+  if (me.lifes <= 0) {
+    me.lifes = 3;
+    monster1.speed = 1;
+  }
 }
