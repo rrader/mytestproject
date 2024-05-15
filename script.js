@@ -24,7 +24,7 @@ function drawObject(o) {
 function drawMe(o) {
   o.y = mouseY;
   drawObject(o);
-  drawParticles(o.x, o.y, o.particles, 0);
+  drawParticles(o.x, o.y, o.particles, 0, 5);
 }
 
 function drawMonster(o) {
@@ -33,12 +33,12 @@ function drawMonster(o) {
   if (o.x < 20) {
     if (abs(o.y - me.y) > 10) {
       me.lifes -= 1;
-      for (var i = 0; i < 20; i++) {
-        drawParticles(o.x+30, o.y-7, o.particles, 2);
+      for (var i = 0; i < 5; i++) {
+        drawParticles(o.x+30, o.y-7, o.particles, 2, 5);
       }
     } else {
-      for (var i = 0; i < 20; i++) {
-        drawParticles(o.x+30, o.y-7, o.particles, 3);
+      for (var i = 0; i < 5; i++) {
+        drawParticles(o.x+30, o.y-7, o.particles, 3, 5);
       }
     }
 
@@ -48,11 +48,11 @@ function drawMonster(o) {
   }
 
   drawObject(o);
-  drawParticles(o.x+30, o.y-7, o.particles, 1);
+  drawParticles(o.x+30, o.y-7, o.particles, 1, 5);
 }
 
-function drawParticles(x, y, particles, d) {
-  for (let i = 0; i < 5; i++) {
+function drawParticles(x, y, particles, d, n) {
+  for (let i = 0; i < n; i++) {
     let p = new Particle(x, y, d);
     particles.push(p);
   }
@@ -76,7 +76,7 @@ class Particle {
       this.d = 5;
     }
     if (type == 1) {
-      this.vx = random(0, 1);
+      this.vx = random(0.5, 2);
       this.vy = random(-0.5, 0.5);
       this.d = 7;
     }
@@ -142,7 +142,19 @@ function draw() {
     background(bg);
   
     if (me.lifes <= 0) {
-      text('Game over', 100, 200);
+      fill("yellow");
+      stroke("black");
+      textAlign(CENTER);
+      textSize(30);
+      text('Game over', width/2, 200);
+      if (frameCount % 60 < 30) {
+        text('Click to start', width/2, 250);
+      }
+      var n = 0;
+      if (frameCount % 10 == 0) {
+        n = 5;
+      }
+      drawParticles(random(0, width), random(0, height), me.particles, 2, n);
     } else {
       drawMe(me);
       drawMonster(monster1);
@@ -168,4 +180,6 @@ function draw() {
 
 function mousePressed() {
   gameStarted = true;
+  me.lifes = 3;
+  monster1.speed = 1;
 }
